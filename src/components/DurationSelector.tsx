@@ -11,6 +11,7 @@ export interface DurationValue {
 interface DurationSelectorProps {
   value?: DurationValue;
   onChange: (duration: DurationValue) => void;
+  onModeChange?: (mode: 'preset' | 'custom') => void;
   error?: string;
   className?: string;
 }
@@ -40,6 +41,7 @@ const formatDuration = (duration: DurationValue): string => {
 export const DurationSelector: React.FC<DurationSelectorProps> = ({
   value,
   onChange,
+  onModeChange,
   error,
   className,
 }) => {
@@ -83,12 +85,14 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
   const handleCustomClick = () => {
     setMode('custom');
     setCustomError('');
+    onModeChange?.('custom');
   };
 
   const handleBackToPresets = () => {
     setMode('preset');
     setCustomError('');
     setUnitDropdownOpen(false);
+    onModeChange?.('preset');
   };
 
   const handleApplyCustom = () => {
@@ -105,6 +109,7 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
     setIsOpen(false);
     setMode('preset');
     setCustomError('');
+    onModeChange?.('preset');
   };
 
   const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -276,8 +281,8 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
         {isOpen && (
           <div className="absolute z-50 w-full mt-1 bg-popover border border-form-border rounded-lg shadow-lg overflow-hidden animate-slide-down">
             <div className="p-3">
-              {/* Preset chips */}
-              <div className="flex flex-wrap gap-2 mb-3">
+              {/* Preset chips - 2 per row */}
+              <div className="grid grid-cols-2 gap-2 mb-3">
                 {PRESET_DURATIONS.map((preset, index) => {
                   const isSelected = value?.value === preset.value.value && value?.unit === preset.value.unit;
                   return (
