@@ -146,8 +146,19 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
     // Custom mode - show inline inputs instead of dropdown
     if (mode === 'custom') {
       return (
-        <div ref={containerRef} className={cn("w-full", className)}>
-          <div className="flex items-center gap-2">
+        <div ref={containerRef} className={cn("w-full relative", className)}>
+          {/* X button - top right */}
+          <button
+            type="button"
+            onClick={handleBackToPresets}
+            className="absolute -top-1 right-0 p-0.5 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+            title="Cancel"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+
+          {/* Input row with check button inline */}
+          <div className="flex items-center gap-2 mt-2">
             {/* Number input with +/- buttons */}
             <div className="flex items-center border border-form-border rounded-lg bg-popover overflow-hidden">
               <button
@@ -213,25 +224,15 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
               )}
             </div>
 
-            {/* Action buttons - X and Check stacked */}
-            <div className="flex flex-col gap-0.5">
-              <button
-                type="button"
-                onClick={handleBackToPresets}
-                className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
-                title="Cancel"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-              <button
-                type="button"
-                onClick={handleApplyCustom}
-                className="p-1 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-                title="Apply"
-              >
-                <Check className="h-3.5 w-3.5" />
-              </button>
-            </div>
+            {/* Check button - inline with inputs */}
+            <button
+              type="button"
+              onClick={handleApplyCustom}
+              className="p-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              title="Apply"
+            >
+              <Check className="h-4 w-4" />
+            </button>
           </div>
 
           {/* Error message */}
@@ -394,89 +395,92 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
         </>
       ) : (
         /* Custom mode - mobile */
-        <div className="flex items-center gap-2">
-          {/* Number input with +/- */}
-          <div className="flex items-center border border-form-border rounded-lg bg-popover overflow-hidden">
-            <button
-              type="button"
-              onClick={handleDecrement}
-              disabled={customValue <= 1}
-              className="px-2 py-2 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-r border-form-border"
-            >
-              <Minus className="h-3.5 w-3.5" />
-            </button>
-            <input
-              ref={numberInputRef}
-              type="number"
-              min="1"
-              max="999"
-              value={customValue || ''}
-              onChange={handleNumberChange}
-              className={cn(
-                "w-10 px-1 py-2 text-sm text-center bg-popover focus:outline-none",
-                "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        <div className="relative">
+          {/* X button - top right */}
+          <button
+            type="button"
+            onClick={handleBackToPresets}
+            className="absolute -top-1 right-0 p-0.5 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+            title="Cancel"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+
+          {/* Input row with check button inline */}
+          <div className="flex items-center gap-2 mt-2">
+            {/* Number input with +/- */}
+            <div className="flex items-center border border-form-border rounded-lg bg-popover overflow-hidden">
+              <button
+                type="button"
+                onClick={handleDecrement}
+                disabled={customValue <= 1}
+                className="px-2 py-2 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-r border-form-border"
+              >
+                <Minus className="h-3.5 w-3.5" />
+              </button>
+              <input
+                ref={numberInputRef}
+                type="number"
+                min="1"
+                max="999"
+                value={customValue || ''}
+                onChange={handleNumberChange}
+                className={cn(
+                  "w-10 px-1 py-2 text-sm text-center bg-popover focus:outline-none",
+                  "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                )}
+              />
+              <button
+                type="button"
+                onClick={handleIncrement}
+                disabled={customValue >= 999}
+                className="px-2 py-2 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-l border-form-border"
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </button>
+            </div>
+
+            {/* Unit dropdown */}
+            <div className="relative flex-1">
+              <button
+                type="button"
+                onClick={() => setUnitDropdownOpen(!unitDropdownOpen)}
+                className="w-full flex items-center gap-1 px-2 py-2 text-sm rounded-lg border border-form-border bg-popover hover:border-primary/50 focus:outline-none transition-all"
+              >
+                <span className="text-xs">{customUnit.charAt(0).toUpperCase() + customUnit.slice(1)}</span>
+                <ChevronDown className="h-3 w-3 text-muted-foreground ml-auto" />
+              </button>
+
+              {unitDropdownOpen && (
+                <div className="absolute z-50 w-full mt-1 bg-popover border border-form-border rounded-lg shadow-lg overflow-hidden">
+                  {UNIT_OPTIONS.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => handleUnitSelect(option.value)}
+                      className={cn(
+                        "w-full px-3 py-2 text-left text-sm transition-colors",
+                        "hover:bg-accent focus:bg-accent focus:outline-none",
+                        customUnit === option.value
+                          ? "bg-accent text-primary font-medium"
+                          : "text-foreground"
+                      )}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
               )}
-            />
-            <button
-              type="button"
-              onClick={handleIncrement}
-              disabled={customValue >= 999}
-              className="px-2 py-2 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-l border-form-border"
-            >
-              <Plus className="h-3.5 w-3.5" />
-            </button>
-          </div>
+            </div>
 
-          {/* Unit dropdown */}
-          <div className="relative flex-1">
-            <button
-              type="button"
-              onClick={() => setUnitDropdownOpen(!unitDropdownOpen)}
-              className="w-full flex items-center gap-1 px-2 py-2 text-sm rounded-lg border border-form-border bg-popover hover:border-primary/50 focus:outline-none transition-all"
-            >
-              <span className="text-xs">{customUnit.charAt(0).toUpperCase() + customUnit.slice(1)}</span>
-              <ChevronDown className="h-3 w-3 text-muted-foreground ml-auto" />
-            </button>
-
-            {unitDropdownOpen && (
-              <div className="absolute z-50 w-full mt-1 bg-popover border border-form-border rounded-lg shadow-lg overflow-hidden">
-                {UNIT_OPTIONS.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => handleUnitSelect(option.value)}
-                    className={cn(
-                      "w-full px-3 py-2 text-left text-sm transition-colors",
-                      "hover:bg-accent focus:bg-accent focus:outline-none",
-                      customUnit === option.value
-                        ? "bg-accent text-primary font-medium"
-                        : "text-foreground"
-                    )}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Action buttons - X and Check stacked */}
-          <div className="flex flex-col gap-0.5">
-            <button
-              type="button"
-              onClick={handleBackToPresets}
-              className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
-              title="Cancel"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
+            {/* Check button - inline with inputs */}
             <button
               type="button"
               onClick={handleApplyCustom}
-              className="p-1 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              className="p-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
               title="Apply"
             >
-              <Check className="h-3.5 w-3.5" />
+              <Check className="h-4 w-4" />
             </button>
           </div>
         </div>
