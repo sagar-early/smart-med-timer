@@ -279,7 +279,7 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
 
         {/* Dropdown with chips */}
         {isOpen && (
-          <div className="absolute z-50 min-w-[280px] mt-1 bg-popover border border-form-border rounded-lg shadow-lg overflow-hidden animate-slide-down">
+          <div className="absolute z-50 min-w-[280px] right-0 mt-1 bg-popover border border-form-border rounded-lg shadow-lg overflow-hidden animate-slide-down">
             <div className="p-2">
               {/* Preset chips - multiple per row */}
               <div className="flex flex-wrap gap-1.5 mb-2">
