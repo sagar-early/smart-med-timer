@@ -279,10 +279,10 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
 
         {/* Dropdown with chips */}
         {isOpen && (
-          <div className="absolute z-50 w-full mt-1 bg-popover border border-form-border rounded-lg shadow-lg overflow-hidden animate-slide-down">
-            <div className="p-3">
-              {/* Preset chips - 2 per row */}
-              <div className="grid grid-cols-2 gap-2 mb-3">
+          <div className="absolute z-50 min-w-[280px] mt-1 bg-popover border border-form-border rounded-lg shadow-lg overflow-hidden animate-slide-down">
+            <div className="p-2">
+              {/* Preset chips - multiple per row */}
+              <div className="flex flex-wrap gap-1.5 mb-2">
                 {PRESET_DURATIONS.map((preset, index) => {
                   const isSelected = value?.value === preset.value.value && value?.unit === preset.value.unit;
                   return (
@@ -291,7 +291,7 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
                       type="button"
                       onClick={() => handlePresetSelect(preset)}
                       className={cn(
-                        "px-3 py-1.5 text-sm rounded-full border transition-all duration-200",
+                        "px-2.5 py-1 text-xs rounded-full border transition-all duration-200 whitespace-nowrap",
                         "hover:border-primary hover:bg-primary/10",
                         "focus:outline-none focus:ring-2 focus:ring-primary/20",
                         isSelected
@@ -309,10 +309,10 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
               <button
                 type="button"
                 onClick={handleCustomClick}
-                className="w-full px-3 py-2 text-left text-sm text-muted-foreground hover:bg-accent hover:text-foreground rounded-md transition-colors flex items-center gap-2 border border-dashed border-form-border"
+                className="w-full px-2.5 py-1.5 text-left text-xs text-muted-foreground hover:bg-accent hover:text-foreground rounded-md transition-colors flex items-center gap-1.5 border border-dashed border-form-border"
               >
-                <Settings className="h-4 w-4" />
-                Custom duration...
+                <Settings className="h-3 w-3" />
+                Custom...
               </button>
             </div>
           </div>
