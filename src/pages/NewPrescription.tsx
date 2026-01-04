@@ -45,6 +45,7 @@ const NewPrescription: React.FC = () => {
   const [timing, setTiming] = useState('');
   const [frequency, setFrequency] = useState('');
   const [duration, setDuration] = useState<DurationValue | undefined>();
+  const [durationMode, setDurationMode] = useState<'preset' | 'custom'>('preset');
 
   const prescribedMedications: Medication[] = [
     {
@@ -240,8 +241,8 @@ const NewPrescription: React.FC = () => {
                   </RadioGroup>
                 </div>
 
-                {/* Frequency and Duration row */}
-                <div className="grid grid-cols-2 gap-4">
+                {/* Frequency and Duration */}
+                <div className={durationMode === 'custom' ? 'space-y-4' : 'grid grid-cols-2 gap-4'}>
                   <div>
                     <Label className="text-sm font-medium mb-2 block">Frequency*</Label>
                     <Select value={frequency} onValueChange={setFrequency}>
@@ -263,6 +264,7 @@ const NewPrescription: React.FC = () => {
                     <DurationSelector
                       value={duration}
                       onChange={setDuration}
+                      onModeChange={setDurationMode}
                     />
                   </div>
                 </div>
