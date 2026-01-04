@@ -151,7 +151,7 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
           <button
             type="button"
             onClick={handleBackToPresets}
-            className="absolute -top-1 right-0 p-0.5 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+            className="absolute -top-5 right-0 p-0.5 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
             title="Cancel"
           >
             <X className="h-3.5 w-3.5" />
@@ -400,7 +400,7 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
           <button
             type="button"
             onClick={handleBackToPresets}
-            className="absolute -top-1 right-0 p-0.5 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+            className="absolute -top-5 right-0 p-0.5 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
             title="Cancel"
           >
             <X className="h-3.5 w-3.5" />
