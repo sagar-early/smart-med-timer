@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, ChevronUp, ArrowLeft, Settings, Plus, Minus } from 'lucide-react';
+import { ChevronDown, ChevronUp, Settings, Plus, Minus, Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -147,102 +147,100 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
     if (mode === 'custom') {
       return (
         <div ref={containerRef} className={cn("w-full", className)}>
-          <div className="p-4 rounded-lg border border-form-border bg-muted/30">
-            {/* Back button */}
-            <button
-              type="button"
-              onClick={handleBackToPresets}
-              className="flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors mb-4"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to presets
-            </button>
-
-            {/* Input row */}
-            <div className="flex items-center gap-3">
-              {/* Number input with +/- buttons */}
-              <div className="flex items-center border border-form-border rounded-lg bg-popover overflow-hidden">
-                <button
-                  type="button"
-                  onClick={handleDecrement}
-                  disabled={customValue <= 1}
-                  className="px-3 py-2.5 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-r border-form-border"
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-                <input
-                  ref={numberInputRef}
-                  type="number"
-                  min="1"
-                  max="999"
-                  value={customValue || ''}
-                  onChange={handleNumberChange}
-                  className={cn(
-                    "w-16 px-2 py-2.5 text-sm text-center bg-popover focus:outline-none",
-                    "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  )}
-                />
-                <button
-                  type="button"
-                  onClick={handleIncrement}
-                  disabled={customValue >= 999}
-                  className="px-3 py-2.5 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-l border-form-border"
-                >
-                  <Plus className="h-4 w-4" />
-                </button>
-              </div>
-
-              {/* Unit dropdown */}
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setUnitDropdownOpen(!unitDropdownOpen)}
-                  className="flex items-center gap-2 px-4 py-2.5 text-sm rounded-lg border border-form-border bg-popover hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all min-w-[110px]"
-                >
-                  <span>{customUnit.charAt(0).toUpperCase() + customUnit.slice(1)}</span>
-                  <ChevronDown className="h-4 w-4 text-muted-foreground ml-auto" />
-                </button>
-
-                {unitDropdownOpen && (
-                  <div className="absolute z-50 w-full mt-1 bg-popover border border-form-border rounded-lg shadow-lg overflow-hidden">
-                    {UNIT_OPTIONS.map((option) => (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => handleUnitSelect(option.value)}
-                        className={cn(
-                          "w-full px-4 py-2.5 text-left text-sm transition-colors",
-                          "hover:bg-accent focus:bg-accent focus:outline-none",
-                          customUnit === option.value
-                            ? "bg-accent text-primary font-medium"
-                            : "text-foreground"
-                        )}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
+          <div className="flex items-center gap-2">
+            {/* Number input with +/- buttons */}
+            <div className="flex items-center border border-form-border rounded-lg bg-popover overflow-hidden">
+              <button
+                type="button"
+                onClick={handleDecrement}
+                disabled={customValue <= 1}
+                className="px-2 py-2 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-r border-form-border"
+              >
+                <Minus className="h-3.5 w-3.5" />
+              </button>
+              <input
+                ref={numberInputRef}
+                type="number"
+                min="1"
+                max="999"
+                value={customValue || ''}
+                onChange={handleNumberChange}
+                className={cn(
+                  "w-12 px-1 py-2 text-sm text-center bg-popover focus:outline-none",
+                  "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 )}
-              </div>
+              />
+              <button
+                type="button"
+                onClick={handleIncrement}
+                disabled={customValue >= 999}
+                className="px-2 py-2 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-l border-form-border"
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </button>
             </div>
 
-            {/* Apply button - full width below */}
-            <button
-              type="button"
-              onClick={handleApplyCustom}
-              className="w-full mt-4 px-4 py-2.5 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-            >
-              Apply
-            </button>
+            {/* Unit dropdown */}
+            <div className="relative flex-1">
+              <button
+                type="button"
+                onClick={() => setUnitDropdownOpen(!unitDropdownOpen)}
+                className="w-full flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-form-border bg-popover hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+              >
+                <span>{customUnit.charAt(0).toUpperCase() + customUnit.slice(1)}</span>
+                <ChevronDown className="h-3.5 w-3.5 text-muted-foreground ml-auto" />
+              </button>
 
-            {/* Error message */}
-            {customError && (
-              <p className="mt-2 text-xs text-destructive">{customError}</p>
-            )}
+              {unitDropdownOpen && (
+                <div className="absolute z-50 w-full mt-1 bg-popover border border-form-border rounded-lg shadow-lg overflow-hidden">
+                  {UNIT_OPTIONS.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => handleUnitSelect(option.value)}
+                      className={cn(
+                        "w-full px-3 py-2 text-left text-sm transition-colors",
+                        "hover:bg-accent focus:bg-accent focus:outline-none",
+                        customUnit === option.value
+                          ? "bg-accent text-primary font-medium"
+                          : "text-foreground"
+                      )}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Action buttons - X and Check stacked */}
+            <div className="flex flex-col gap-0.5">
+              <button
+                type="button"
+                onClick={handleBackToPresets}
+                className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                title="Cancel"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={handleApplyCustom}
+                className="p-1 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                title="Apply"
+              >
+                <Check className="h-3.5 w-3.5" />
+              </button>
+            </div>
           </div>
 
+          {/* Error message */}
+          {customError && (
+            <p className="mt-1 text-xs text-destructive">{customError}</p>
+          )}
+
           {error && (
-            <p className="mt-1.5 text-xs text-destructive">{error}</p>
+            <p className="mt-1 text-xs text-destructive">{error}</p>
           )}
         </div>
       );
@@ -396,98 +394,91 @@ export const DurationSelector: React.FC<DurationSelectorProps> = ({
         </>
       ) : (
         /* Custom mode - mobile */
-        <div className="p-3 rounded-lg border border-form-border bg-muted/30">
-          {/* Back link */}
-          <button
-            type="button"
-            onClick={handleBackToPresets}
-            className="flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors mb-3"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to presets
-          </button>
-
-          {/* Custom input row */}
-          <div className="flex gap-2">
-            {/* Number input with +/- */}
-            <div className="flex items-center gap-1 flex-1">
-              <button
-                type="button"
-                onClick={handleDecrement}
-                disabled={customValue <= 1}
-                className="p-2 rounded-md border border-form-border bg-popover hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <Minus className="h-4 w-4" />
-              </button>
-              <input
-                ref={numberInputRef}
-                type="number"
-                min="1"
-                max="999"
-                value={customValue || ''}
-                onChange={handleNumberChange}
-                className={cn(
-                  "flex-1 px-3 py-2 text-sm text-center rounded-md border bg-popover focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all",
-                  customError ? "border-destructive" : "border-form-border"
-                )}
-              />
-              <button
-                type="button"
-                onClick={handleIncrement}
-                disabled={customValue >= 999}
-                className="p-2 rounded-md border border-form-border bg-popover hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <Plus className="h-4 w-4" />
-              </button>
-            </div>
-
-            {/* Unit dropdown */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setUnitDropdownOpen(!unitDropdownOpen)}
-                className="flex items-center gap-2 px-3 py-2 text-sm rounded-md border border-form-border bg-popover hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all min-w-[90px]"
-              >
-                <span>{customUnit.charAt(0).toUpperCase() + customUnit.slice(1)}</span>
-                <ChevronDown className="h-3 w-3 text-muted-foreground ml-auto" />
-              </button>
-
-              {unitDropdownOpen && (
-                <div className="absolute z-50 w-full mt-1 bg-popover border border-form-border rounded-md shadow-lg overflow-hidden">
-                  {UNIT_OPTIONS.map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => handleUnitSelect(option.value)}
-                      className={cn(
-                        "w-full px-3 py-2 text-left text-sm transition-colors",
-                        "hover:bg-accent focus:bg-accent focus:outline-none",
-                        customUnit === option.value
-                          ? "bg-accent text-primary font-medium"
-                          : "text-foreground"
-                      )}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
+        <div className="flex items-center gap-2">
+          {/* Number input with +/- */}
+          <div className="flex items-center border border-form-border rounded-lg bg-popover overflow-hidden">
+            <button
+              type="button"
+              onClick={handleDecrement}
+              disabled={customValue <= 1}
+              className="px-2 py-2 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-r border-form-border"
+            >
+              <Minus className="h-3.5 w-3.5" />
+            </button>
+            <input
+              ref={numberInputRef}
+              type="number"
+              min="1"
+              max="999"
+              value={customValue || ''}
+              onChange={handleNumberChange}
+              className={cn(
+                "w-10 px-1 py-2 text-sm text-center bg-popover focus:outline-none",
+                "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               )}
-            </div>
+            />
+            <button
+              type="button"
+              onClick={handleIncrement}
+              disabled={customValue >= 999}
+              className="px-2 py-2 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors border-l border-form-border"
+            >
+              <Plus className="h-3.5 w-3.5" />
+            </button>
           </div>
 
-          {/* Apply button - full width on mobile */}
-          <button
-            type="button"
-            onClick={handleApplyCustom}
-            className="w-full mt-3 px-4 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-          >
-            Apply
-          </button>
+          {/* Unit dropdown */}
+          <div className="relative flex-1">
+            <button
+              type="button"
+              onClick={() => setUnitDropdownOpen(!unitDropdownOpen)}
+              className="w-full flex items-center gap-1 px-2 py-2 text-sm rounded-lg border border-form-border bg-popover hover:border-primary/50 focus:outline-none transition-all"
+            >
+              <span className="text-xs">{customUnit.charAt(0).toUpperCase() + customUnit.slice(1)}</span>
+              <ChevronDown className="h-3 w-3 text-muted-foreground ml-auto" />
+            </button>
 
-          {/* Error message */}
-          {customError && (
-            <p className="mt-2 text-xs text-destructive">{customError}</p>
-          )}
+            {unitDropdownOpen && (
+              <div className="absolute z-50 w-full mt-1 bg-popover border border-form-border rounded-lg shadow-lg overflow-hidden">
+                {UNIT_OPTIONS.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => handleUnitSelect(option.value)}
+                    className={cn(
+                      "w-full px-3 py-2 text-left text-sm transition-colors",
+                      "hover:bg-accent focus:bg-accent focus:outline-none",
+                      customUnit === option.value
+                        ? "bg-accent text-primary font-medium"
+                        : "text-foreground"
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Action buttons - X and Check stacked */}
+          <div className="flex flex-col gap-0.5">
+            <button
+              type="button"
+              onClick={handleBackToPresets}
+              className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+              title="Cancel"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={handleApplyCustom}
+              className="p-1 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              title="Apply"
+            >
+              <Check className="h-3.5 w-3.5" />
+            </button>
+          </div>
         </div>
       )}
 
